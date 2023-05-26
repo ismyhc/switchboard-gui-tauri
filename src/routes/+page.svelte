@@ -6,7 +6,9 @@
   // https://github.com/tauri-apps/tauri/issues/5170
   onMount(async () => {
     const appWindow = (await import('@tauri-apps/api/window')).appWindow;
-    appWindow.show();
+    setTimeout(function () {
+      appWindow.show();
+    }, 300);
   });
 </script>
 

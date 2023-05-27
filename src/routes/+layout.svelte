@@ -13,7 +13,9 @@
   import { faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
 </script>
 
-<div class="drawer drawer-mobile bg-neutral">
+<div
+  class="drawer drawer-mobile bg-neutral rounded-3xl border-b-8 border-r-8 border-l-2 border-t-2 border-black"
+>
   <input id="left-menu" type="checkbox" class="drawer-toggle" />
 
   <div class="drawer-content flex flex-col items-center justify-center">

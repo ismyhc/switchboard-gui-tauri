@@ -80,7 +80,7 @@
         "height": 800,
         "minWidth": 1024,
         "minHeight": 800,
-        "visible": false,
+        "visible": true,
         "decorations": false,
         "transparent": true
       }

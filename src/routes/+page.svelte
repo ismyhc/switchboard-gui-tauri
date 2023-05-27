@@ -1,15 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import ChainCardItemComponent from '$lib/components/ChainCardItemComponent.svelte';
-  // Hack to prevent white screen before loading...
-  // Not sure if there are side effects to do this quite yet...
-  // https://github.com/tauri-apps/tauri/issues/5170
-  onMount(async () => {
-    const appWindow = (await import('@tauri-apps/api/window')).appWindow;
-    setTimeout(function () {
-      appWindow.show();
-    }, 300);
-  });
 </script>
 
 <div class="h-full w-full select-none">

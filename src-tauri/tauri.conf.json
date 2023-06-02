@@ -17,7 +17,7 @@
         "all": false,
         "execute": false,
         "open": true,
-        "scope": [{ "name": "binaries/drivechain-qt", "sidecar": true }],
+        "scope": [{ "name": "binaries/drivechain-qt", "sidecar": true, "args": true }],
         "sidecar": true
       },
       "window": {
@@ -30,6 +30,16 @@
         "unmaximize": true,
         "unminimize": true,
         "startDragging": true
+      },
+      "fs": {
+        "exists": true,
+        "createDir": true,
+        "writeFile": true,
+        "readDir": true,
+        "scope": ["$HOME/.switchboard2/**", "$HOME/.switchboard2", "$HOME/*"]
+      },
+      "path": {
+        "all": true
       }
     },
     "bundle": {
@@ -82,7 +92,8 @@
         "minHeight": 800,
         "visible": true,
         "decorations": false,
-        "transparent": true
+        "transparent": true,
+        "theme": "Dark"
       }
     ]
   }

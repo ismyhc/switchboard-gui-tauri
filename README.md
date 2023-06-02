@@ -19,3 +19,5 @@ Once you've gotten your development environment setup
 pnpm install
 pnpm tauri dev
 ```
+
+It also important to note that the unnamed mainchain binaries live in `src-tauri/unnamed-binaries`. When running `pnpm tauri dev` or `pnpm tauri build`, it will copy the binary for the current platform, rename it and put it in `src-tauir/binaries`.

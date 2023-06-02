@@ -11,7 +11,7 @@
 <div class="card-compact rounded-xl bg-base-100 {disabled ? 'opacity-25' : ''} shadow-offset-black">
   <div class="card-body">
     <h2 class="card-title">{title}</h2>
-    <p>{description}</p>
+    <p class="text-xs">{description}</p>
     <div class="card-actions justify-center pt-2">
       <button class="btn btn-secondary rounded-xl w-full" {disabled}
         ><Fa icon={faPlay} class="pr-4" /> Launch</button

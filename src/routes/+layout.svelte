@@ -45,7 +45,7 @@
     <slot />
     <footer class="footer items-center p-4 bg-neutral text-neutral-content">
       <div class="items-center grid-flow-col text-xs">
-        <p>Copyright ©2023 LayerTwo Labs, Inc. All rights reserved.</p>
+        <p>Made with ❤️ by LayerTwo Labs, Inc</p>
       </div>
       <div class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
         <a href="https://twitter.com/layertwolabs" rel="external" target="_blank"
@@ -81,14 +81,13 @@
       <!-- Sidebar content here -->
       <div class="divider text-xs uppercase text-secondary px-2" />
       <li class="bordered"><a class="font-black">Overview</a></li>
-      <li><a class="font-bold">Mainchain</a></li>
+      <li class="disabled"><a class="font-bold">Mainchain</a></li>
       <div class="divider text-xs uppercase text-secondary px-2">Sidechains</div>
-      <li><a class="font-bold">Testchain</a></li>
-      <li><a class="font-bold">Drivechain</a></li>
-      <li><a class="font-bold">Bitassets</a></li>
-      <li><a class="font-bold">Bitnames</a></li>
-      <li><a class="font-bold">Ethereum</a></li>
-      <li><a class="font-bold">Zcash</a></li>
+      <li class="disabled"><a class="font-bold">Testchain</a></li>
+      <li class="disabled"><a class="font-bold">Bitassets</a></li>
+      <li class="disabled"><a class="font-bold">Bitnames</a></li>
+      <li class="disabled"><a class="font-bold">Ethereum</a></li>
+      <li class="disabled"><a class="font-bold">Zcash</a></li>
     </ul>
   </div>
 </div>

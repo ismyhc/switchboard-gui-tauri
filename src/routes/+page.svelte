@@ -6,7 +6,7 @@
   <div class="grid grid-cols-4 gap-2 justify-items-stretch p-2">
     <ChainCardItemComponent
       title="Mainchain"
-      description="Bitcoin mainchain"
+      description="Bitcoin Core + Bips 300/301"
       other="Mode: regtest"
       disabled={false}
     />

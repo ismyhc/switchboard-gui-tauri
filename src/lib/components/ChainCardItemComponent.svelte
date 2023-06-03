@@ -16,8 +16,8 @@
     <div class="card-actions justify-center pt-2">
       {#if running}
         <button
-          class="btn btn-secondary rounded-xl w-full"
-          disabled={false}
+          class="btn btn-success rounded-xl w-full"
+          {disabled}
           on:click={() => mine(chainData)}
           ><Fa icon={faHammer} class="pr-4" /> {running ? 'Mine' : 'Launch'}</button
         >

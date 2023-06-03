@@ -24,6 +24,16 @@ async function main() {
     `${origDir}/drivechain-qt-${process.platform}${extension}`,
     `${destDir}/drivechain-qt-${targetTriple}${extension}`
   );
+
+  copyFileSync(
+    `${origDir}/bitassets-qt-${process.platform}${extension}`,
+    `${destDir}/bitassets-qt-${targetTriple}${extension}`
+  );
+
+  copyFileSync(
+    `${origDir}/testchain-qt-${process.platform}${extension}`,
+    `${destDir}/testchain-qt-${targetTriple}${extension}`
+  );
 }
 
 main().catch((e) => {

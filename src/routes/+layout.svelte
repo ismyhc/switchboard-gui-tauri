@@ -19,25 +19,51 @@
 
   const chainsRunning = useChainsRunning();
 
+  $: selectedId = 'overview';
+
   export let data: LayoutData;
 
   async function update() {
     for (const k in data.chainData) {
       const chainData = data.chainData[k];
       try {
-        const res = await rpcOpertation('getblockcount', chainData);
+        const res = await rpcOpertation('getblockcount', [], chainData);
         if (res.ok) {
           // set chain runnning
-          console.log(`${chainData.id} running...`);
+          //console.log(`${chainData.id} running...`);
           $chainsRunning.set(chainData.id, true);
           $chainsRunning = $chainsRunning;
+
+          if (chainData.id === 'drivechain') {
+            if ((res.data as any).result < 200) {
+              for (const j in data.chainData) {
+                const innerChainData = data.chainData[j];
+                if (innerChainData.id !== 'drivechain') {
+                  let r = await rpcOpertation(
+                    'createsidechainproposal',
+                    [innerChainData.slot, `${innerChainData.id}`],
+                    chainData
+                  );
+
+                  console.log(r);
+                }
+              }
+              await rpcOpertation('generate', [200], chainData);
+            }
+          }
         }
       } catch (error) {
         // set chain not running
-        console.log(`${chainData.id} fucked...${error}`);
+        //console.log(`${chainData.id} Not running...`);
         $chainsRunning.set(chainData.id, false);
         $chainsRunning = $chainsRunning;
       }
+    }
+  }
+
+  function selectChain(chainId: string) {
+    if (chainId === 'overview' || $chainsRunning.get(chainId)) {
+      selectedId = chainId;
     }
   }
 
@@ -115,13 +141,33 @@
       <!-- Sidebar content here -->
       <div class="divider text-xs uppercase text-secondary px-2" />
 
-      <li class="bordered"><a href={null} class="font-black">Overview</a></li>
-      <li class="disabled"><a href={null} class="font-bold">{data.chainData[0].name}</a></li>
+      <li class={selectedId === 'overview' ? 'bordered' : ''}>
+        <a href={null} class="font-black" on:click={() => selectChain('overview')}>Overview</a>
+      </li>
+      <li
+        class="{$chainsRunning.get('drivechain') ? '' : 'disabled'} {selectedId === 'drivechain'
+          ? 'bordered'
+          : ''}"
+      >
+        <a href={null} class="font-bold" on:click={() => selectChain('drivechain')}
+          >{data.chainData[0].name}</a
+        >
+      </li>
 
       <div class="divider text-xs uppercase text-secondary px-2">Sidechains</div>
       {#each data.chainData as chainData, i}
         {#if i != 0}
-          <li class="disabled"><a href={null} class="font-bold">{chainData.name}</a></li>
+          <li
+            class="{selectedId === chainData.id ? 'bordered' : ''} {$chainsRunning.get(
+              'drivechain'
+            ) && $chainsRunning.get(chainData.id)
+              ? ''
+              : 'disabled'}"
+          >
+            <a href={null} class="font-bold" on:click={() => selectChain(chainData.id)}
+              >{chainData.name}</a
+            >
+          </li>
         {/if}
       {/each}
     </ul>

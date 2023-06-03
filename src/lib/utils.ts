@@ -6,15 +6,17 @@ import { Body, fetch } from '@tauri-apps/api/http';
 import { Buffer } from 'buffer';
 
 async function launchChain(chainData: ChainData) {
-  try {
-    const dir = await readDir('.switchboard2', { dir: BaseDirectory.Home, recursive: true });
-  } catch (error) {
-    console.log('.switchboard2 directory not found. Creating...');
-    await createDir(`.switchboard2/data/${chainData.id}`, {
-      dir: BaseDirectory.Home,
-      recursive: true
-    });
-  }
+  // try {
+  //   const dir = await readDir('.switchboard2', { dir: BaseDirectory.Home, recursive: true });
+  // } catch (error) {
+  //   console.log('.switchboard2 directory not found. Creating...');
+  // }
+
+  await createDir(`.switchboard2/data/${chainData.id}`, {
+    dir: BaseDirectory.Home,
+    recursive: true
+  });
+
   const homeDirPath = await homeDir();
   const args = [
     `-regtest=${chainData.regtest ? '1' : '0'}`,
@@ -24,11 +26,11 @@ async function launchChain(chainData: ChainData) {
     `-rpcpassword=${chainData.rpcpass}`,
     '-server=1'
   ];
-  const command = Command.sidecar(`binaries/${chainData.binName}`, args);
+  const command = Command.sidecar(`binaries/${chainData.id}-qt`, args);
   return await command.spawn();
 }
 
-async function rpcOpertation(op: string, chainData: ChainData) {
+async function rpcOpertation(op: string, params: any[], chainData: ChainData) {
   var userInfo = `${chainData.rpcuser}:${chainData.rpcpass}`;
   var buf =
     Buffer.from && Buffer.from !== Uint8Array.from ? Buffer.from(userInfo) : new Buffer(userInfo);
@@ -42,9 +44,19 @@ async function rpcOpertation(op: string, chainData: ChainData) {
       jsonrpc: '2.0',
       id: 'switchboard',
       method: `${op}`,
-      params: []
+      params: params
     })
   });
 }
 
-export { launchChain, rpcOpertation };
+async function mine(chainData: ChainData) {
+  let op = 'refreshbmm';
+  let params = [0.0001];
+  if (chainData.id === 'drivechain') {
+    op = 'generate';
+    params = [1];
+  }
+  return rpcOpertation(op, params, chainData);
+}
+
+export { launchChain, rpcOpertation, mine };

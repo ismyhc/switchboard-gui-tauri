@@ -6,7 +6,7 @@ interface ChainData {
   regtest: boolean;
   rpcuser: string;
   rpcpass: string;
-  binName: string;
+  slot: number;
 }
 
 export { type ChainData };

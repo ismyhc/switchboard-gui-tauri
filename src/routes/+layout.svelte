@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import '../app.css';
   import { appWindow } from '@tauri-apps/api/window';
   import Fa from 'svelte-fa';
@@ -11,6 +11,39 @@
   import { faRedditAlien } from '@fortawesome/free-brands-svg-icons';
   import { faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
   import { faWindowMinimize } from '@fortawesome/free-solid-svg-icons';
+
+  import { onMount } from 'svelte';
+  import type { LayoutData } from './$types';
+  import { useChainsRunning } from '$lib/stores';
+  import { rpcOpertation } from '$lib/utils';
+
+  const chainsRunning = useChainsRunning();
+
+  export let data: LayoutData;
+
+  async function update() {
+    for (const k in data.chainData) {
+      const chainData = data.chainData[k];
+      try {
+        const res = await rpcOpertation('getblockcount', chainData);
+        if (res.ok) {
+          // set chain runnning
+          console.log(`${chainData.id} running...`);
+          $chainsRunning.set(chainData.id, true);
+          $chainsRunning = $chainsRunning;
+        }
+      } catch (error) {
+        // set chain not running
+        console.log(`${chainData.id} fucked...${error}`);
+        $chainsRunning.set(chainData.id, false);
+        $chainsRunning = $chainsRunning;
+      }
+    }
+  }
+
+  onMount(async () => {
+    setInterval(update, 1000);
+  });
 </script>
 
 <div
@@ -76,18 +109,21 @@
           width="168"
           height="40"
           draggable="false"
+          alt=""
         />
       </div>
       <!-- Sidebar content here -->
       <div class="divider text-xs uppercase text-secondary px-2" />
-      <li class="bordered"><a class="font-black">Overview</a></li>
-      <li class="disabled"><a class="font-bold">Mainchain</a></li>
+
+      <li class="bordered"><a href={null} class="font-black">Overview</a></li>
+      <li class="disabled"><a href={null} class="font-bold">{data.chainData[0].name}</a></li>
+
       <div class="divider text-xs uppercase text-secondary px-2">Sidechains</div>
-      <li class="disabled"><a class="font-bold">Testchain</a></li>
-      <li class="disabled"><a class="font-bold">Bitassets</a></li>
-      <li class="disabled"><a class="font-bold">Bitnames</a></li>
-      <li class="disabled"><a class="font-bold">Ethereum</a></li>
-      <li class="disabled"><a class="font-bold">Zcash</a></li>
+      {#each data.chainData as chainData, i}
+        {#if i != 0}
+          <li class="disabled"><a href={null} class="font-bold">{chainData.name}</a></li>
+        {/if}
+      {/each}
     </ul>
   </div>
 </div>

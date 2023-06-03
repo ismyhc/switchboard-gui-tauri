@@ -44,7 +44,7 @@
       "http": {
         "all": true,
         "request": true,
-        "scope": ["http://localhost:18443/*"]
+        "scope": ["http://localhost*"]
       }
     },
     "bundle": {

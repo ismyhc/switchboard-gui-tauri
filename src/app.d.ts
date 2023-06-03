@@ -1,11 +1,18 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
+
+import type { ChainData } from './types';
+
 declare global {
-  namespace App {
+  declare namespace App {
     // interface Error {}
     // interface Locals {}
-    // interface PageData {}
+    interface PageData {}
     // interface Platform {}
+
+    interface LayoutData {
+      chainData: ChainData[];
+    }
   }
 }
 

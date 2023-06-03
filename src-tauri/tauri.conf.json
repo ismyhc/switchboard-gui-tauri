@@ -40,6 +40,11 @@
       },
       "path": {
         "all": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": ["http://localhost:18443/*"]
       }
     },
     "bundle": {

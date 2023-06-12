@@ -11,6 +11,7 @@
     "version": "0.1.0"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "allowlist": {
       "all": false,
       "shell": {
@@ -101,8 +102,7 @@
         "minHeight": 800,
         "visible": true,
         "decorations": false,
-        "transparent": true,
-        "theme": "Dark"
+        "transparent": true
       }
     ]
   }

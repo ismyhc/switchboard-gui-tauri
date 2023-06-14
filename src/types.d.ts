@@ -9,4 +9,11 @@ interface ChainData {
   slot: number;
 }
 
-export { type ChainData };
+interface ChainState {
+  id: string;
+  running: boolean;
+  pid: number;
+  refreshbmm: boolean;
+}
+
+export { type ChainData, type ChainState };

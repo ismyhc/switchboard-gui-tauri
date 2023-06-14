@@ -10,6 +10,12 @@ This application is built using Tauri. The frontend is built using Sveletkit wit
 - [pnpm](https://pnpm.io/installation)
 - [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites)
 
+- If you are running on macOS with Apple Silicon you will need to ensure you have Rossetta 2 installed. You can run the following comand to install.
+
+```
+softwareupdate --install-rosetta
+```
+
 Once you've gotten your development environment setup
 
 1. clone repo

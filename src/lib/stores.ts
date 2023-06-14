@@ -1,3 +1,3 @@
 import { useWritable } from './use-shared-store';
 
-export const useChainsRunning = () => useWritable('chainsRunning', new Map<string, boolean>());
+export const useChainsState = () => useWritable('chainsState', new Map<string, ChainState>());

@@ -14,10 +14,10 @@
 
   import { onMount } from 'svelte';
   import type { LayoutData } from './$types';
-  import { useChainsRunning } from '$lib/stores';
-  import { rpcOpertation } from '$lib/utils';
+  import { useChainsState } from '$lib/stores';
+  import { rpcOpertation, refreshbmm } from '$lib/utils';
 
-  const chainsRunning = useChainsRunning();
+  const chainsState = useChainsState();
 
   $: selectedId = 'overview';
 
@@ -29,10 +29,12 @@
       try {
         const res = await rpcOpertation('getblockcount', [], chainData);
         if (res.ok) {
-          // set chain runnning
-          //console.log(`${chainData.id} running...`);
-          $chainsRunning.set(chainData.id, true);
-          $chainsRunning = $chainsRunning;
+          const state = $chainsState.get(chainData.id);
+          if (state) {
+            state.running = true;
+            $chainsState.set(chainData.id, state);
+            $chainsState = $chainsState;
+          }
 
           if (chainData.id === 'drivechain') {
             if ((res.data as any).result < 200) {
@@ -44,25 +46,30 @@
                     [innerChainData.slot, `${innerChainData.id}`],
                     chainData
                   );
-
                   console.log(r);
                 }
               }
               await rpcOpertation('generate', [200], chainData);
             }
           }
+
+          if (chainData.id !== 'drivechain' && state && state.refreshbmm) {
+            await refreshbmm(chainData);
+          }
         }
       } catch (error) {
-        // set chain not running
-        //console.log(`${chainData.id} Not running...`);
-        $chainsRunning.set(chainData.id, false);
-        $chainsRunning = $chainsRunning;
+        const state = $chainsState.get(chainData.id);
+        if (state) {
+          state.running = false;
+          $chainsState.set(chainData.id, state);
+          $chainsState = $chainsState;
+        }
       }
     }
   }
 
   function selectChain(chainId: string) {
-    if (chainId === 'overview' || $chainsRunning.get(chainId)) {
+    if (chainId === 'overview' || $chainsState.get(chainId)) {
       selectedId = chainId;
     }
   }
@@ -145,7 +152,8 @@
         <a href={null} class="font-black" on:click={() => selectChain('overview')}>Overview</a>
       </li>
       <li
-        class="{$chainsRunning.get('drivechain') ? '' : 'disabled'} {selectedId === 'drivechain'
+        class="{$chainsState.get('drivechain')?.running ? '' : 'disabled'} {selectedId ===
+        'drivechain'
           ? 'bordered'
           : ''}"
       >
@@ -158,9 +166,9 @@
       {#each data.chainData as chainData, i}
         {#if i != 0}
           <li
-            class="{selectedId === chainData.id ? 'bordered' : ''} {$chainsRunning.get(
+            class="{selectedId === chainData.id ? 'bordered' : ''} {$chainsState.get(
               'drivechain'
-            ) && $chainsRunning.get(chainData.id)
+            ) && $chainsState.get(chainData.id)?.running
               ? ''
               : 'disabled'}"
           >

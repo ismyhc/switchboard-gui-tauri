@@ -1,17 +1,11 @@
 import type { ChainData } from '../types';
 import { readDir, BaseDirectory, createDir } from '@tauri-apps/api/fs';
-import { Command } from '@tauri-apps/api/shell';
+import { Command, Child } from '@tauri-apps/api/shell';
 import { homeDir } from '@tauri-apps/api/path';
 import { Body, fetch } from '@tauri-apps/api/http';
 import { Buffer } from 'buffer';
 
 async function launchChain(chainData: ChainData) {
-  // try {
-  //   const dir = await readDir('.switchboard2', { dir: BaseDirectory.Home, recursive: true });
-  // } catch (error) {
-  //   console.log('.switchboard2 directory not found. Creating...');
-  // }
-
   await createDir(`.switchboard2/data/${chainData.id}`, {
     dir: BaseDirectory.Home,
     recursive: true
@@ -27,7 +21,14 @@ async function launchChain(chainData: ChainData) {
     '-server=1'
   ];
   const command = Command.sidecar(`binaries/${chainData.id}-qt`, args);
-  return await command.spawn();
+  const res = await command.spawn();
+  return await res.pid;
+}
+
+async function killChain(chainState: ChainState) {
+  console.log(chainState.pid)
+  const child = new Child(chainState.pid);
+  await child.kill();
 }
 
 async function rpcOpertation(op: string, params: any[], chainData: ChainData) {
@@ -50,13 +51,13 @@ async function rpcOpertation(op: string, params: any[], chainData: ChainData) {
 }
 
 async function mine(chainData: ChainData) {
-  let op = 'refreshbmm';
-  let params = [0.0001];
   if (chainData.id === 'drivechain') {
-    op = 'generate';
-    params = [1];
+    return rpcOpertation('generate', [1], chainData);
   }
-  return rpcOpertation(op, params, chainData);
 }
 
-export { launchChain, rpcOpertation, mine };
+async function refreshbmm(chainData: ChainData) {
+  return rpcOpertation('refreshbmm', [0.0001], chainData);
+}
+
+export { launchChain, rpcOpertation, mine, refreshbmm, killChain };
